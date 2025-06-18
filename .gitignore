@@ -13,10 +13,9 @@ whatsapp-bot/node_modules/
 .env
 
 # Dataset and model files
-*.csv
 *.pkl
 *.safetensors
-model/
+model/intent-model
 
 # Logs
 *.log
