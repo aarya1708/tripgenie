@@ -7,7 +7,7 @@ import json
 import pickle
 
 # Paths
-DATA_PATH = "intent_dataset.csv"
+DATA_PATH = "model/intent_dataset.csv"
 SAVE_DIR = "./intent-model/final"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
