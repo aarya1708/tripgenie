@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+env/
+venv/
+
+# Node modules
+whatsapp-bot/node_modules/
+
+# Environment
+.env
+
+# Dataset and model files
+*.csv
+*.pkl
+*.safetensors
+model/
+
+# Logs
+*.log
+*.tmp
