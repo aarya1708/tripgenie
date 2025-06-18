@@ -8,7 +8,7 @@ import pickle
 
 # Paths
 DATA_PATH = "model/intent_dataset.csv"
-SAVE_DIR = "./intent-model/final"
+SAVE_DIR = os.path.join(os.path.dirname(__file__), "intent-model", "final")
 os.makedirs(SAVE_DIR, exist_ok=True)
 
 # Load data
