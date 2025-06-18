@@ -27,7 +27,7 @@ jobs:
         pip install huggingface_hub
 
     - name: Train intent classifier
-      run: python model/intent-model/train_intent_classifier.py
+      run: python model/train_intent_classifier.py
 
     - name: Upload model to Hugging Face
       env:
