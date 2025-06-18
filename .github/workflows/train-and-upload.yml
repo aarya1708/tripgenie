@@ -1,0 +1,44 @@
+name: Train & Upload TripGenie Intent Model
+
+on:
+  push:
+    paths:
+      - 'model/intent-model/train_intent_classifier.py'
+      - 'model/intent-model/intent_dataset.csv'
+      - '.github/workflows/train-and-upload.yml'
+
+jobs:
+  train-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install huggingface_hub
+
+    - name: Train intent classifier
+      run: python model/train_intent_classifier.py
+
+    - name: Upload model to Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        huggingface-cli login --token $HF_TOKEN
+        python -c "
+from huggingface_hub import upload_folder;
+upload_folder(
+  folder_path='model/intent-model/final',
+  repo_id='aary1708/tripgenie-intent-classifier',
+  repo_type='model',
+  commit_message='Auto-update model from GitHub Actions'
+)"
