@@ -3,8 +3,8 @@ name: Train & Upload TripGenie Intent Model
 on:
   push:
     paths:
-      - 'model/intent-model/train_intent_classifier.py'
-      - 'model/intent-model/intent_dataset.csv'
+      - 'model/train_intent_classifier.py'
+      - 'model/intent_dataset.csv'
       - '.github/workflows/train-and-upload.yml'
 
 jobs:
