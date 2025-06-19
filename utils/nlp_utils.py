@@ -9,7 +9,7 @@ load_dotenv()
 nlp_spacy = spacy.load("en_core_web_sm")
 
 HF_MODEL_URL = "https://api-inference.huggingface.co/models/aarya1708/tripgenie-intent-classifier"
-HF_TOKEN = os.getenv("HF_TOKEN")
+HF_TOKEN = os.getenv("HF_API_TOKEN")
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 GEONAMES_USERNAME = os.getenv("OPEN_ROUTER_API_KEY")
