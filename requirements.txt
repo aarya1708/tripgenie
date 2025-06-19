@@ -9,3 +9,4 @@ spacy
 requests
 python-dotenv
 Flask
+gunicorn
