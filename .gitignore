@@ -8,7 +8,7 @@ venv/
 
 # Node modules
 whatsapp-bot/node_modules/
-
+whatsapp-bot/auth/
 # Environment
 .env
 

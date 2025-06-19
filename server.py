@@ -20,6 +20,10 @@ active_sessions = {}      # track active user sessions and timestamp
 allowed_users = set()     # users who triggered start
 pending_location_confirm = {}  # when NLP detects location
 
+@app.route("/")
+def index():
+    return "TripGenie backend is live!"
+
 @app.route("/message", methods=["POST"])
 def handle_message():
     data = request.json
@@ -336,4 +340,5 @@ def generate_itenary(location):
         return "Sorry, we couldn't generate an itinerary at this moment. Please try again later."
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+

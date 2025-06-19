@@ -11,12 +11,12 @@ load_dotenv()
 nlp_spacy = spacy.load("en_core_web_sm")
 
 # Load tokenizer and model
-MODEL_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'model', 'intent-model', 'final'))
-tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
-model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
+HF_MODEL_ID = "aary1708/tripgenie-intent-classifier"
+tokenizer = BertTokenizer.from_pretrained(HF_MODEL_ID)
+model = BertForSequenceClassification.from_pretrained(HF_MODEL_ID)
 
 # Load label mappings
-with open(f"{MODEL_PATH}/id2label.json") as f:
+with open(f"{HF_MODEL_ID}/id2label.json") as f:
     id2label = json.load(f)
 id2label = {int(k): v for k, v in id2label.items()}
 

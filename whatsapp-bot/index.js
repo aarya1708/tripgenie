@@ -87,26 +87,6 @@ const startSock = async () => {
 
         if (!text) return;
 
-        // Owner commands (no activation needed)
-        // if (sender === ownerNumber) {
-        //     const command = text.toLowerCase();
-        //     if (command === "#off") {
-        //         botActive = false;
-        //         console.log("🛑 Bot turned OFF by owner");
-        //         await sock.sendMessage(ownerNumber, { text: "🤖 Bot turned OFF." });
-        //         return;
-        //     }
-
-        //     if (command === "#on") {
-        //         botActive = true;
-        //         console.log("✅ Bot turned ON by owner");
-        //         await sock.sendMessage(ownerNumber, { text: "🤖 Bot turned ON." });
-        //         return;
-        //     }
-        // }
-
-        // if (!botActive) return;
-
         // Activation check
         if (text.toLowerCase() === TRIGGER_WORD) {
             if(activeUsers.has(sender)) {
