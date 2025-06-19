@@ -15,7 +15,7 @@ whatsapp-bot/auth/
 # Dataset and model files
 *.pkl
 *.safetensors
-model/intent-model
+model
 
 # Logs
 *.log
