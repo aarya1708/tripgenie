@@ -11,7 +11,7 @@ load_dotenv()
 nlp_spacy = spacy.load("en_core_web_sm")
 
 # Load tokenizer and model
-HF_MODEL_ID = "aary1708/tripgenie-intent-classifier"
+HF_MODEL_ID = "aarya1708/tripgenie-intent-classifier"
 tokenizer = BertTokenizer.from_pretrained(HF_MODEL_ID)
 model = BertForSequenceClassification.from_pretrained(HF_MODEL_ID)
 
