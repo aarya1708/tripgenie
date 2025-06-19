@@ -1,3 +1,5 @@
+from transformers import BertTokenizer, BertForSequenceClassification
+import torch
 import spacy
 import json
 import os
@@ -8,11 +10,16 @@ load_dotenv()
 # Load spaCy NER
 nlp_spacy = spacy.load("en_core_web_sm")
 
-HF_MODEL_URL = "https://api-inference.huggingface.co/models/aarya1708/tripgenie-intent-classifier"
-HF_TOKEN = os.getenv("HF_API_TOKEN")
+# Load tokenizer and model
+MODEL_PATH = "aarya1708/tripgenie-intent-classifier"
+tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
+model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
+
+# Load label mappings
+id2label = model.config.id2label
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-GEONAMES_USERNAME = os.getenv("OPEN_ROUTER_API_KEY")
+GEONAMES_USERNAME = os.getenv("GEONAMES_USERNAME")
 
 def normalize_text(text):
     # Normalize Unicode (NFKD separates accents from base characters)
@@ -23,28 +30,11 @@ def normalize_text(text):
     return text.lower()
 
 def predict_intent(text):
-    headers = {
-        "Authorization": f"Bearer {HF_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "inputs": text
-    }
-
-    try:
-        response = requests.post(HF_MODEL_URL, headers=headers, json=payload)
-        response.raise_for_status()
-        result = response.json()
-
-        if isinstance(result, list) and len(result) > 0:
-            return result[0].get("label", "unknown")
-        else:
-            print("⚠️ Unexpected model response:", result)
-            return "unknown"
-
-    except Exception as e:
-        print("❌ Error in intent prediction:", e)
-        return "unknown"
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+    with torch.no_grad():
+        outputs = model(**inputs)
+    predicted_class_id = torch.argmax(outputs.logits, dim=1).item()
+    return id2label[predicted_class_id]
 
 def validate_location_with_google(place_name):
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
@@ -97,3 +87,5 @@ def analyze_text(text):
         "intent": predict_intent(text),
         "location": extract_location(text)
     }
+
+# print(analyze_text("burger in kolkata"))
