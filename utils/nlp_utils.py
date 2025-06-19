@@ -1,4 +1,4 @@
-import spacy
+# import spacy
 import json
 import os
 import requests
@@ -9,7 +9,7 @@ from transformers import pipeline
 load_dotenv()
 
 # Load spaCy NER
-nlp_spacy = spacy.load("en_core_web_sm")
+# nlp_spacy = spacy.load("en_core_web_sm")
 
 # Use Hugging Face Inference API for classification
 MODEL_PATH = "aarya1708/tripgenie-intent-classifier"
@@ -68,10 +68,10 @@ def extract_location(text):
             print("GeoNames detection error:", e)
 
     # Fallback to spaCy NER
-    doc = nlp_spacy(text)
-    for ent in doc.ents:
-        if ent.label_ in ["GPE", "LOC", "ORG"]:
-            return ent.text
+    # doc = nlp_spacy(text)
+    # for ent in doc.ents:
+    #     if ent.label_ in ["GPE", "LOC", "ORG"]:
+    #         return ent.text
 
     return None
 

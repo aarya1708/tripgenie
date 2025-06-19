@@ -1,5 +1,4 @@
 transformers
-spacy
 requests
 python-dotenv
 Flask
