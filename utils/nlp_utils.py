@@ -1,40 +1,41 @@
-from transformers import BertTokenizer, BertForSequenceClassification
-import torch
 import spacy
 import json
 import os
 import requests
 import unicodedata
 from dotenv import load_dotenv
+from transformers import pipeline
+
 load_dotenv()
+
 # Load spaCy NER
 nlp_spacy = spacy.load("en_core_web_sm")
 
-# Load tokenizer and model
+# Use Hugging Face Inference API for classification
 MODEL_PATH = "aarya1708/tripgenie-intent-classifier"
-tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
-model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
+# HF_TOKEN = os.getenv("HF_TOKEN")  # optional, if rate limited
 
-# Load label mappings
-id2label = model.config.id2label
+classifier = pipeline(
+    "text-classification",
+    model=MODEL_PATH,
+    # token=HF_TOKEN  # remove if not using private model or no token
+)
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 GEONAMES_USERNAME = os.getenv("GEONAMES_USERNAME")
 
 def normalize_text(text):
-    # Normalize Unicode (NFKD separates accents from base characters)
     text = unicodedata.normalize('NFKD', text)
-    # Remove accents by filtering out combining characters
     text = ''.join(c for c in text if not unicodedata.combining(c))
-    # Convert to lowercase
     return text.lower()
 
 def predict_intent(text):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    predicted_class_id = torch.argmax(outputs.logits, dim=1).item()
-    return id2label[predicted_class_id]
+    try:
+        result = classifier(text)[0]
+        return result["label"]
+    except Exception as e:
+        print("Hugging Face API error:", e)
+        return "unknown"
 
 def validate_location_with_google(place_name):
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
@@ -52,32 +53,24 @@ def validate_location_with_google(place_name):
     return None
 
 def extract_location(text):
-    # Try GeoNames first to detect if any token is a valid location
+    # Try GeoNames first
     tokens = text.split()
     for token in tokens:
         url = f"http://api.geonames.org/searchJSON?q={token}&maxRows=1&username={GEONAMES_USERNAME}"
         try:
             resp = requests.get(url, timeout=5)
             data = resp.json()
-            # print(data['geonames'][0]['name'])
             if data.get("totalResultsCount", 0) > 0:
                 candidate_location = data["geonames"][0]["name"]
-                # print(candidate_location)
-                # Validate with Google
-                # print(token)
-
                 if token.lower() == normalize_text(candidate_location):
                     return candidate_location
-            else:
-                print("noooooooooooo")
         except Exception as e:
             print("GeoNames detection error:", e)
 
-    # Fallback to spaCy
+    # Fallback to spaCy NER
     doc = nlp_spacy(text)
     for ent in doc.ents:
         if ent.label_ in ["GPE", "LOC", "ORG"]:
-            print("hi")
             return ent.text
 
     return None
@@ -88,4 +81,5 @@ def analyze_text(text):
         "location": extract_location(text)
     }
 
-# print(analyze_text("burger in kolkata"))
+# Example usage (uncomment to test)
+# print(analyze_text("find me cafes in pune"))
