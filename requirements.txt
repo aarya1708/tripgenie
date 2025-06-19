@@ -4,5 +4,5 @@ requests
 python-dotenv
 Flask
 gunicorn
-torch==2.2.2+cpu
+torch==2.5.0+cpu
 --extra-index-url https://download.pytorch.org/whl/cpu
