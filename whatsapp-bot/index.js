@@ -69,7 +69,7 @@ const startSock = async () => {
             console.log(`📍 Location shared: ${lat}, ${lng}`);
 
             try {
-                const res = await axios.post("http://127.0.0.1:5000/location", {
+                const res = await axios.post("https://tripgenie-r5f3.onrender.com/location", {
                     sender,
                     latitude: lat,
                     longitude: lng,
@@ -94,7 +94,7 @@ const startSock = async () => {
                 return;
             }
 
-            await axios.post("http://127.0.0.1:5000/message", {
+            await axios.post("https://tripgenie-r5f3.onrender.com/message", {
                 sender,
                 message: "end_session",
             });
