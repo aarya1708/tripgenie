@@ -1,5 +1,3 @@
-from transformers import BertTokenizer, BertForSequenceClassification
-import torch
 import spacy
 import json
 import os
@@ -10,15 +8,8 @@ load_dotenv()
 # Load spaCy NER
 nlp_spacy = spacy.load("en_core_web_sm")
 
-# Load tokenizer and model
-HF_MODEL_ID = "aarya1708/tripgenie-intent-classifier"
-tokenizer = BertTokenizer.from_pretrained(HF_MODEL_ID)
-model = BertForSequenceClassification.from_pretrained(HF_MODEL_ID)
-
-# Load label mappings
-with open(f"{HF_MODEL_ID}/id2label.json") as f:
-    id2label = json.load(f)
-id2label = {int(k): v for k, v in id2label.items()}
+HF_MODEL_URL = "https://api-inference.huggingface.co/models/aarya1708/tripgenie-intent-classifier"
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 GEONAMES_USERNAME = os.getenv("OPEN_ROUTER_API_KEY")
@@ -32,11 +23,28 @@ def normalize_text(text):
     return text.lower()
 
 def predict_intent(text):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    predicted_class_id = torch.argmax(outputs.logits, dim=1).item()
-    return id2label[predicted_class_id]
+    headers = {
+        "Authorization": f"Bearer {HF_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "inputs": text
+    }
+
+    try:
+        response = requests.post(HF_MODEL_URL, headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+
+        if isinstance(result, list) and len(result) > 0:
+            return result[0].get("label", "unknown")
+        else:
+            print("⚠️ Unexpected model response:", result)
+            return "unknown"
+
+    except Exception as e:
+        print("❌ Error in intent prediction:", e)
+        return "unknown"
 
 def validate_location_with_google(place_name):
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
