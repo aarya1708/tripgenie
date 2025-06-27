@@ -1,0 +1,4 @@
+.env
+model/intent-model
+whatsapp-bot/auth
+whatsapp-bot/node_modules
