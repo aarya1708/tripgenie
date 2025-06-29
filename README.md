@@ -60,7 +60,8 @@ In addition to nearby exploration, TripGenie can generate personalized 4-day iti
 
 ## 📸 Screenshots
 
-Photu here
+ - Option 1: Nearby Places
+(./screenshots/customer-dashboard.png)
 
 ---
 
