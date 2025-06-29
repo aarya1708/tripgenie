@@ -60,12 +60,22 @@ In addition to nearby exploration, TripGenie can generate personalized 4-day iti
 
 ## 📸 Screenshots
 
- - Option 1: Nearby Places
-![](./screenshots/1.png)
-![](./screenshots/2.png)
-![](./screenshots/3.png)
-![](./screenshots/4.png)
-![](./screenshots/5.png)
+ - **Option 1: Nearby Places**
+<p>
+<img src="./Screenshots/1.PNG" alt="Screenshot" width=23% height=auto/>
+<img src="./Screenshots/2.PNG" alt="Screenshot" width=23% height=auto/>
+<img src="./Screenshots/3.PNG" alt="Screenshot" width=23% height=auto/>
+<img src="./Screenshots/4.PNG" alt="Screenshot" width=23% height=auto/>
+<img src="./Screenshots/5.PNG" alt="Screenshot" width=23% height=auto/>
+</p>
+
+ - **Option 2: Itinerary**
+
+<p>
+<img src="./Screenshots/6.PNG" alt="Screenshot" width=23% height=auto/>
+<img src="./Screenshots/7.PNG" alt="Screenshot" width=23% height=auto/>
+<img src="./Screenshots/8.PNG" alt="Screenshot" width=23% height=auto/>
+</p>
 
 ---
 
