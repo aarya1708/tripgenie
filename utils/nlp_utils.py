@@ -50,7 +50,7 @@ def extract_location(text):
     tokens = text.split()
     for token in tokens:
         #check for bugged location words
-        if token.lower() not in ["cafe", "want", "petroll", "kafe", "gaming", "have", "burgers"]: 
+        if token.lower() not in ["cafe", "want", "petroll", "kafe", "gaming", "have", "burgers", "coffee"]: 
             url = f"http://api.geonames.org/searchJSON?q={token}&maxRows=2&username={GEONAMES_USERNAME}"
             try:
                 resp = requests.get(url, timeout=10)
